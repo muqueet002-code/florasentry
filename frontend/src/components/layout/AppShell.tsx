@@ -149,18 +149,23 @@ function DrawerContent({ items, onClose }: { items: NavItem[]; onClose: () => vo
   )
 }
 
-/** Compact profile control: identity + role, with sign-out inside rather than a bare
- * button in the bar. No new route - the app has no profile screen to link to yet.
- * Kept on a translucent white pill regardless of what's behind it, so it reads
- * equally well on the plain header and floating over the hero photo. */
+/** Compact profile control: identity + role, with a link to the full profile page
+ * and sign-out inside, rather than a bare button in the bar. The closed control is
+ * transparent (just the avatar + name, no pill background) so it blends into
+ * whatever's behind it - the plain header or the hero photo - the same as the
+ * language switcher. */
 function ProfileMenu({
   name,
   role,
+  profilePath,
   onLogout,
+  transparent = false,
 }: {
   name: string
   role: string
+  profilePath: string
   onLogout: () => void
+  transparent?: boolean
 }) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
@@ -173,12 +178,24 @@ function ProfileMenu({
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex items-center gap-2 rounded-full border border-slate-300 bg-white/95 py-1 pr-3 pl-1 shadow-sm backdrop-blur-sm hover:bg-white"
+        className={cn(
+          'flex items-center gap-2 rounded-full border py-1 pr-3 pl-1 transition-colors',
+          transparent
+            ? 'border-white/50 hover:bg-white/15'
+            : 'border-transparent hover:bg-slate-100',
+        )}
       >
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-olive text-sm font-semibold text-white">
           {initial}
         </span>
-        <span className="hidden max-w-32 truncate text-sm text-slate-700 sm:inline">{name}</span>
+        <span
+          className={cn(
+            'hidden max-w-32 truncate text-sm sm:inline',
+            transparent ? 'text-white drop-shadow' : 'text-slate-700',
+          )}
+        >
+          {name}
+        </span>
       </button>
 
       {open && (
@@ -197,10 +214,17 @@ function ProfileMenu({
               <p className="truncate text-sm font-medium text-slate-900">{name}</p>
               <p className="text-xs text-slate-500">{role.replaceAll('_', ' ').toLowerCase()}</p>
             </div>
+            <Link
+              to={profilePath}
+              onClick={() => setOpen(false)}
+              className="mt-1 block w-full rounded px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+            >
+              {t('profile.viewProfile')}
+            </Link>
             <button
               type="button"
               onClick={onLogout}
-              className="mt-1 w-full rounded px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+              className="w-full rounded px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
             >
               {t('nav.logout')}
             </button>
@@ -233,8 +257,14 @@ export function AppShell() {
 
   // Each screen gets a real tab title (SIH demo polish) rather than a static
   // "FloraSentry" everywhere - the nav item whose path is the longest prefix
-  // match of the current URL is the current screen.
+  // match of the current URL is the current screen. Routes that aren't nav items
+  // (currently just the profile page) are checked first so they don't fall through
+  // to "Home", which is also a prefix of every route under a role's base path.
   useEffect(() => {
+    if (user && location.pathname === PROFILE_PATH[user.role]) {
+      document.title = `${t('profile.title')} - ${t('app.name')}`
+      return
+    }
     const roleItems = user ? NAV_BY_ROLE[user.role] : []
     const current = [...roleItems]
       .sort((a, b) => b.to.length - a.to.length)
@@ -334,12 +364,14 @@ export function AppShell() {
 
           {/* Right: language + profile */}
           <div className="flex items-center gap-2">
-            <LanguageSwitcher />
+            <LanguageSwitcher transparent={isHeroPage} />
             {user && (
               <ProfileMenu
                 name={user.full_name}
                 role={user.role}
+                profilePath={PROFILE_PATH[user.role]}
                 onLogout={() => void handleLogout()}
+                transparent={isHeroPage}
               />
             )}
           </div>

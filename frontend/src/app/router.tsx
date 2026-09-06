@@ -25,6 +25,7 @@ import { MapPage } from '@/features/map/MapPage'
 import { OfficialHome } from '@/features/official/OfficialHome'
 import { OfficialObservationDetailPage } from '@/features/official/OfficialObservationDetailPage'
 import { AdminHome } from '@/features/admin/AdminHome'
+import { ProfilePage } from '@/features/profile/ProfilePage'
 
 export const router = createBrowserRouter([
   { path: '/', element: <RoleHomeRedirect /> },
@@ -64,6 +65,7 @@ export const router = createBrowserRouter([
       // EXTENSION_WORKER/OFFICIAL/ADMIN, per existing RBAC; MapPage hides that
       // toggle for a role without VIEW_HOTSPOTS).
       { path: 'map', element: <MapPage /> },
+      { path: 'profile', element: <ProfilePage /> },
       { path: 'reports', element: <PlannedPage titleKey="nav.reports" phase="a later phase" /> },
       { path: 'alerts', element: <PlannedPage titleKey="nav.alerts" phase="a later phase" /> },
       // Advisory and follow-up are fully built (Phase 6/7) but live embedded in each
@@ -72,7 +74,10 @@ export const router = createBrowserRouter([
       // implemented" for a feature that exists.
       { path: 'advisory', element: <Navigate to="/app/observations" replace /> },
       { path: 'followups', element: <Navigate to="/app/observations" replace /> },
-      { path: 'expert-help', element: <PlannedPage titleKey="nav.expertHelp" phase="a later phase" /> },
+      {
+        path: 'expert-help',
+        element: <PlannedPage titleKey="nav.expertHelp" phase="a later phase" />,
+      },
     ],
   },
 
@@ -91,6 +96,7 @@ export const router = createBrowserRouter([
       // Lab referral is a future extension of the review workflow, not this phase.
       { path: 'referrals', element: <PlannedPage titleKey="nav.cases" phase="Phase 5" /> },
       { path: 'map', element: <MapPage /> },
+      { path: 'profile', element: <ProfilePage /> },
     ],
   },
 
@@ -110,6 +116,7 @@ export const router = createBrowserRouter([
       // Priority-zone ranking (beyond raw hotspots) is Phase 8 (official dashboards).
       { path: 'priority-zones', element: <PlannedPage titleKey="nav.hotspots" phase="Phase 8" /> },
       { path: 'trends', element: <PlannedPage titleKey="nav.trends" phase="Phase 8" /> },
+      { path: 'profile', element: <ProfilePage /> },
     ],
   },
 
@@ -127,6 +134,7 @@ export const router = createBrowserRouter([
       { path: 'catalog', element: <PlannedPage titleKey="nav.catalog" phase="Phase 2" /> },
       { path: 'data-sources', element: <PlannedPage titleKey="nav.dataSources" phase="Phase 4" /> },
       { path: 'audit', element: <PlannedPage titleKey="nav.audit" phase="Phase 2" /> },
+      { path: 'profile', element: <ProfilePage /> },
     ],
   },
 

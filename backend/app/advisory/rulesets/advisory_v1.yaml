@@ -1,0 +1,85 @@
+# FloraSentry ADVISORY_RULE_V1 ruleset
+#
+# Selects WHICH generic IPM guidance sections apply to an observation. The RULES here
+# are deterministic and configurable (this file); the WORDING for each section lives in
+# the frontend's i18n bundles (en/hi/mr) as `advisory.section.<key>` - the same
+# separation the app already uses everywhere else (see catalog._localised, risk
+# explanation_key). Editing this file changes behaviour without touching Python.
+#
+# ⚠️  NOTHING HERE NAMES A PESTICIDE, A DOSE, AN APPLICATION RATE OR A WAITING PERIOD.
+#     Sections only ever reference IPM categories (cultural / mechanical / biological)
+#     and general safe-input guidance ("read the label", "consult an expert") - never a
+#     specific product or number. This is intentional and must not be changed to add
+#     one, per the product rule "AI prediction != confirmed diagnosis" and the
+#     instruction never to invent scientific treatment claims.
+
+ruleset_version: "v1.0.0"
+method: "ADVISORY_RULE_V1"
+disclaimer_key: "advisory.prototype_disclaimer"
+
+# observations.verification_status -> a coarser tier the rules below match on.
+# "unavailable" is not a real enum value - it is what the advisory engine uses when
+# there is no prediction row at all (AI down/failed) and no review yet.
+tiers:
+  CONFIRMED: confirmed
+  CORRECTED: confirmed
+  PREDICTED: ai_unconfirmed
+  PENDING_REVIEW: awaiting_review
+  LAB_REFERRED: awaiting_review
+  REJECTED: rejected
+
+# First matching rule wins. Same `when`-clause engine as the risk ruleset
+# (app/risk/rule_engine.py:_matches), reused rather than reimplemented.
+rules:
+  - when: { tier: rejected }
+    sections: [rejected_notice, resubmit_guidance]
+
+  - when: { tier: unavailable }
+    sections: [no_diagnosis_yet, general_hygiene, contact_expert_always]
+
+  - when: { tier: awaiting_review }
+    sections: [awaiting_review_notice, general_hygiene, monitoring_basic, contact_expert_always]
+
+  - when: { tier: ai_unconfirmed, agent_kind: HEALTHY }
+    sections: [likely_healthy_notice, monitoring_basic]
+
+  - when: { tier: ai_unconfirmed, agent_kind_in: [DISEASE, DISORDER] }
+    sections:
+      [ai_disease_notice, ipm_cultural, ipm_mechanical, monitoring_by_risk, contact_expert_conditional]
+
+  - when: { tier: ai_unconfirmed, agent_kind: PEST }
+    sections:
+      [ai_pest_notice, ipm_cultural, ipm_biological, monitoring_by_risk, contact_expert_conditional]
+
+  - when: { tier: ai_unconfirmed }
+    sections: [ai_generic_notice, general_hygiene, monitoring_by_risk, contact_expert_conditional]
+
+  - when: { tier: confirmed, agent_kind: HEALTHY }
+    sections: [confirmed_healthy_notice, monitoring_basic]
+
+  - when: { tier: confirmed, agent_kind_in: [DISEASE, DISORDER] }
+    sections:
+      [
+        confirmed_disease_notice,
+        ipm_cultural,
+        ipm_mechanical,
+        ipm_biological,
+        safe_input_notice,
+        monitoring_by_risk,
+        contact_expert_always_confirmed,
+      ]
+
+  - when: { tier: confirmed, agent_kind: PEST }
+    sections:
+      [
+        confirmed_pest_notice,
+        ipm_cultural,
+        ipm_mechanical,
+        ipm_biological,
+        safe_input_notice,
+        monitoring_by_risk,
+        contact_expert_always_confirmed,
+      ]
+
+  - when: {}
+    sections: [generic_notice, contact_expert_always]

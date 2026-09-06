@@ -15,7 +15,7 @@ from fastapi import APIRouter, Response, status
 
 from app.core.config import settings
 from app.core.responses import success
-from app.db.session import check_database, check_postgis
+from app.db.session import SessionLocal, check_database, check_postgis
 
 router = APIRouter(tags=["health"])
 
@@ -27,18 +27,41 @@ def _component_status() -> dict[str, Any]:
     return {
         "database": {"ok": db_ok, "error": db_error},
         "postgis": {"ok": postgis_ok, "version": postgis_version},
-        # Phase 1 ships no model and no weather provider. Reported honestly rather
-        # than omitted, so the absence is visible instead of implied working.
-        "ai_model": {
-            "ok": False,
-            "state": "NOT_CONFIGURED",
-            "detail": "No model registered. AI inference lands in Phase 2.",
-        },
+        "ai_model": _ai_status(db_ok),
         "weather_provider": {
-            "ok": False,
-            "state": "NOT_CONFIGURED",
-            "detail": "No provider selected (TRD decision D5). Weather lands in Phase 3.",
+            "ok": settings.WEATHER_PROVIDER != "none",
+            "state": ("DISABLED" if settings.WEATHER_PROVIDER == "none" else "CONFIGURED"),
+            "provider": settings.WEATHER_PROVIDER,
+            # "CONFIGURED" means a provider is selected, not that it answered just now.
+            # Live reachability is reported per request via is_stale / unavailable.
+            "detail": None,
         },
+    }
+
+
+def _ai_status(db_ok: bool) -> dict[str, Any]:
+    """Real model state. No weights ship with this repository, so the honest
+    answer here is normally AI_MODEL_UNAVAILABLE - never an implied 'working'."""
+    if not db_ok:
+        return {
+            "ok": False,
+            "state": "UNKNOWN",
+            "detail": "Database unavailable; model registry cannot be read.",
+        }
+    from app.ai.inference_service import model_status
+
+    session = SessionLocal()
+    try:
+        status_payload = model_status(session)
+    except Exception as exc:  # pragma: no cover - defensive
+        return {"ok": False, "state": "UNKNOWN", "detail": type(exc).__name__}
+    finally:
+        session.close()
+    return {
+        "ok": bool(status_payload["ok"]),
+        "state": status_payload["state"],
+        "detail": status_payload.get("detail"),
+        "model_version": status_payload.get("model_version"),
     }
 
 

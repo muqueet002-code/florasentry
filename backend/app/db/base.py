@@ -65,6 +65,12 @@ OBSERVATION_STATUS_VALUES = (
 OBSERVATION_TYPE_VALUES = ("IMAGE", "PEST_TRAP", "SENSOR", "MANUAL_REPORT")
 AGENT_KIND_VALUES = ("DISEASE", "PEST", "DISORDER", "HEALTHY", "UNKNOWN")
 LANGUAGE_CODE_VALUES = ("en", "hi", "mr")
+RISK_LEVEL_VALUES = ("LOW", "MEDIUM", "HIGH")
+# Workflow state: has the farmer submitted the follow-up yet. Distinct from `outcome`,
+# which is the farmer's own assessment of how the crop is doing (TRD 20.2 pattern:
+# pipeline state is never collapsed into truth/assessment state).
+FOLLOWUP_STATUS_VALUES = ("SCHEDULED", "SUBMITTED")
+FOLLOWUP_OUTCOME_VALUES = ("IMPROVED", "UNCHANGED", "WORSENED", "RESOLVED", "NEEDS_EXPERT_REVIEW")
 
 user_role_enum = pg_enum(*USER_ROLE_VALUES, name="user_role")
 source_type_enum = pg_enum(*SOURCE_TYPE_VALUES, name="source_type")
@@ -73,6 +79,9 @@ observation_status_enum = pg_enum(*OBSERVATION_STATUS_VALUES, name="observation_
 observation_type_enum = pg_enum(*OBSERVATION_TYPE_VALUES, name="observation_type")
 agent_kind_enum = pg_enum(*AGENT_KIND_VALUES, name="agent_kind")
 language_code_enum = pg_enum(*LANGUAGE_CODE_VALUES, name="language_code")
+risk_level_enum = pg_enum(*RISK_LEVEL_VALUES, name="risk_level")
+followup_status_enum = pg_enum(*FOLLOWUP_STATUS_VALUES, name="followup_status")
+followup_outcome_enum = pg_enum(*FOLLOWUP_OUTCOME_VALUES, name="followup_outcome")
 
 
 # ---- Column factories --------------------------------------------------------

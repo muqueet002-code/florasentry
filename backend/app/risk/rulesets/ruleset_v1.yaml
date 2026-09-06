@@ -1,0 +1,130 @@
+# FloraSentry RULE_BASED_V1 risk ruleset
+#
+# ⚠️  THESE WEIGHTS AND BANDS ARE PROTOTYPE DECISION-SUPPORT PARAMETERS.
+#     They are NOT scientifically validated and NOT an agronomic recommendation.
+#     Real values must come from an agronomist or from published, cited
+#     disease-favourability guidance for the specific crops in scope, and the source
+#     must then be recorded in the data_sources table.
+#
+#     The structure below shows the MECHANISM. The numbers are placeholders chosen to
+#     be defensible-looking and internally consistent, nothing more. Every risk
+#     assessment produced from this file carries `disclaimer_key` so the UI says so.
+
+ruleset_version: "v1.0.0"
+method: "RULE_BASED_V1"
+disclaimer_key: "risk.prototype_disclaimer"
+
+# Score (0-100) to level. Configurable.
+levels:
+  LOW:
+    min: 0
+    max: 33
+  MEDIUM:
+    min: 34
+    max: 66
+  HIGH:
+    min: 67
+    max: 100
+
+# When an input is unavailable the factor is dropped and the remaining weights are
+# renormalised, rather than the missing value being treated as zero. Zero would be a
+# claim ("no risk from this factor"); dropping it is the truth ("we do not know").
+missing_factor_policy: renormalise
+
+uncertainty:
+  base: 0.05
+  per_missing_factor: 0.15
+  max: 0.9
+  # Stale weather is real data, just old - a smaller penalty than absent data.
+  stale_weather_penalty: 0.1
+
+factors:
+  # --- AI signal -------------------------------------------------------------
+  ai_signal:
+    weight: 0.30
+    # Required context flags. If any is false/absent the factor is SKIPPED and listed
+    # as missing - never scored by a catch-all rule, which would assert a value we do
+    # not have.
+    requires: [has_prediction]
+    explanation_key: risk.factor.ai_signal
+    rules:
+      # A confident prediction contributes its confidence directly.
+      - when: { has_prediction: true, is_low_confidence: false }
+        score_expr: confidence_pct
+      # An uncertain prediction contributes less: the model is not sure, so the
+      # score should not behave as if it were.
+      - when: { has_prediction: true, is_low_confidence: true }
+        score_expr: confidence_pct_damped
+      - when: { has_prediction: false }
+        score: null
+
+  # --- Weather ---------------------------------------------------------------
+  weather:
+    weight: 0.25
+    requires: [weather_available]
+    explanation_key: risk.factor.weather
+    rules:
+      - when: { humidity_pct: { gte: 85 }, temperature_c: { between: [20, 32] } }
+        score: 85
+        explanation_key: risk.factor.humid_warm
+      - when: { humidity_pct: { gte: 70 }, temperature_c: { between: [18, 34] } }
+        score: 60
+        explanation_key: risk.factor.moderately_humid
+      - when: { rainfall_mm_recent: { gte: 40 } }
+        score: 70
+        explanation_key: risk.factor.recent_rain
+      - when: { humidity_pct: { lt: 50 } }
+        score: 20
+        explanation_key: risk.factor.dry_conditions
+      - when: {}
+        score: 40
+        explanation_key: risk.factor.weather_neutral
+
+  # --- Crop growth stage -----------------------------------------------------
+  growth_stage:
+    weight: 0.15
+    requires: [has_stage]
+    explanation_key: risk.factor.growth_stage
+    rules:
+      # Mid-season stages are treated as more exposed than establishment or harvest.
+      - when: { stage_code_in: [FLOWERING, BOLL_DEVELOPMENT, POD_FILLING, FRUITING] }
+        score: 75
+        explanation_key: risk.factor.susceptible_stage
+      - when: { stage_code_in: [VEGETATIVE, SQUARE_FORMATION, TRANSPLANT] }
+        score: 50
+        explanation_key: risk.factor.growing_stage
+      - when: { stage_code_in: [SOWING, NURSERY, MATURITY, HARVEST] }
+        score: 25
+        explanation_key: risk.factor.less_susceptible_stage
+      - when: { has_stage: false }
+        score: null
+
+  # --- Nearby confirmed cases ------------------------------------------------
+  nearby_confirmed:
+    weight: 0.20
+    explanation_key: risk.factor.nearby_confirmed
+    rules:
+      - when: { nearby_confirmed_count: { gte: 3 } }
+        score: 90
+        explanation_key: risk.factor.many_nearby_confirmed
+      - when: { nearby_confirmed_count: { gte: 1 } }
+        score: 60
+        explanation_key: risk.factor.some_nearby_confirmed
+      - when: { nearby_confirmed_count: { eq: 0 } }
+        score: 10
+        explanation_key: risk.factor.no_nearby_confirmed
+
+  # --- Local reporting history ----------------------------------------------
+  local_history:
+    weight: 0.10
+    explanation_key: risk.factor.local_history
+    rules:
+      - when: { nearby_observation_count: { gte: 5 } }
+        score: 70
+        explanation_key: risk.factor.high_local_activity
+      - when: { nearby_observation_count: { gte: 1 } }
+        score: 40
+        explanation_key: risk.factor.some_local_activity
+      - when: { nearby_observation_count: { eq: 0 } }
+        score: 15
+        explanation_key: risk.factor.no_local_activity

@@ -16,11 +16,14 @@ from app.models.catalog import (
     Symptom,
 )
 from app.models.farmer import Farmer, Field
+from app.models.followup import Followup
 from app.models.observation import Observation, ObservationImage
 from app.models.prediction import AiModelRegistry, AiPrediction
 from app.models.provenance import AuditLog, DataSource
 from app.models.region import AdminRegion
+from app.models.risk import RiskAssessment
 from app.models.user import RefreshToken, User
+from app.models.weather import WeatherForecast, WeatherObservation
 
 __all__ = [
     "AdminRegion",
@@ -36,10 +39,14 @@ __all__ = [
     "DiseasePestCatalog",
     "Farmer",
     "Field",
+    "Followup",
     "GrowthStage",
     "Observation",
     "ObservationImage",
     "RefreshToken",
+    "RiskAssessment",
     "Symptom",
     "User",
+    "WeatherForecast",
+    "WeatherObservation",
 ]
