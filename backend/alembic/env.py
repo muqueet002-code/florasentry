@@ -65,12 +65,18 @@ def run_migrations_online() -> None:
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
-    )
-    with connectable.connect() as connection:
         # The postgis/postgis image installs postgis_tiger_geocoder and appends `tiger`
         # to the database search_path. Without pinning to `public`, reflection sees the
         # geocoder's ~40 tables as unqualified and autogenerate proposes dropping them.
-        connection.exec_driver_sql("SET search_path TO public")
+        #
+        # This is set as a CONNECT OPTION rather than by issuing `SET search_path` on
+        # the connection. Issuing the statement opens an implicit transaction that
+        # Alembic's own `begin_transaction()` then nests inside, so the migration's DDL
+        # is rolled back when the connection closes - the upgrade reports success and
+        # silently changes nothing.
+        connect_args={"options": "-csearch_path=public"},
+    )
+    with connectable.connect() as connection:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,

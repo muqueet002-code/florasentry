@@ -17,15 +17,26 @@ dependencies = [
     "pyjwt>=2.9",
     "python-multipart>=0.0.12",
     "shapely>=2.0",
+    "pillow>=10.4",
+    "httpx>=0.27",
+    "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
+# Torch is NOT a base dependency: it is ~2GB and is only needed once real model
+# weights exist. The runner imports it lazily, so the application starts and reports
+# AI_MODEL_UNAVAILABLE honestly when torch (or the artifact) is absent.
+ai = [
+    "torch>=2.4",
+    "torchvision>=0.19",
+]
 dev = [
     "pytest>=8.3",
     "pytest-cov>=6.0",
     "httpx>=0.27",
     "ruff>=0.8",
     "mypy>=1.13",
+    "respx>=0.21",
 ]
 
 [build-system]

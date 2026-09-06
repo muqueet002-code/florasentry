@@ -66,11 +66,81 @@ class Settings(BaseSettings):
     GIS_OPERATING_BBOX: str = "72.6,15.6,80.9,22.1"
     GIS_METRIC_SRID: int = 32643
 
-    # ---- Feature flags for later phases ----
-    # Phase 1 ships no model, no weather provider and no sensor ingest.
-    AI_ENABLED: bool = False
-    WEATHER_PROVIDER: str = "none"
+    # ---- Image handling (Phase 2) ----
+    IMAGE_MAX_BYTES: int = 10 * 1024 * 1024
+    IMAGE_ALLOWED_MIME: str = "image/jpeg,image/png,image/webp"
+    IMAGE_MIN_EDGE_PX: int = 64
+    IMAGE_MAX_EDGE_PX: int = 8000
+    IMAGE_STORE_MAX_EDGE_PX: int = 2048
+    IMAGE_THUMBNAIL_EDGE_PX: int = 320
+    IMAGE_DEDUPE_WINDOW_HOURS: int = 24
+
+    # ---- Storage (Phase 2) ----
+    STORAGE_BACKEND: Literal["local"] = "local"
+    STORAGE_LOCAL_PATH: str = "./var/media"
+
+    # ---- AI inference (Phase 2) ----
+    AI_ENABLED: bool = True
+    # Directory holding model weights. No weights ship with this repository; when the
+    # registry points at a missing artifact the service reports AI_MODEL_UNAVAILABLE
+    # rather than substituting anything.
+    AI_MODEL_ARTIFACT_DIR: str = "./var/models"
+    AI_DEVICE: str = "cpu"
+    AI_INFERENCE_TIMEOUT_SEC: int = 30
+    AI_MAX_CONCURRENT_INFERENCE: int = 2
+    AI_TOP_K: int = 3
+
+    # ---- Weather (Phase 3) ----
+    # "open_meteo" is a real, key-less public API (verified). "none" disables weather
+    # entirely and every risk assessment then reports WEATHER as a missing factor.
+    WEATHER_PROVIDER: Literal["open_meteo", "none"] = "open_meteo"
+    WEATHER_BASE_URL: str = "https://api.open-meteo.com/v1/forecast"
+    WEATHER_API_KEY: str = ""  # Open-Meteo needs none; other providers would.
+    WEATHER_TIMEOUT_SEC: float = 8.0
+    WEATHER_MAX_RETRIES: int = 2
+    WEATHER_CACHE_TTL_MIN: int = 60
+    WEATHER_FORECAST_TTL_MIN: int = 180
+    WEATHER_STALE_MAX_HOURS: int = 24
+    # Coordinate rounding for the cache key: 2 dp is roughly 1.1 km, so nearby fields
+    # share one entry and provider calls scale with area, not with observation count.
+    WEATHER_GRID_PRECISION: int = 2
+    WEATHER_FORECAST_DAYS: int = 7
+
+    # ---- Risk engine (Phase 3) ----
+    RISK_RULESET_PATH: str = "app/risk/rulesets/ruleset_v1.yaml"
+    RISK_FORECAST_DAYS: int = 7
+    RISK_NEARBY_RADIUS_M: int = 5000
+    RISK_NEARBY_WINDOW_DAYS: int = 30
+
+    # ---- GIS layers (Phase 4) ----
+    # Every /gis/* endpoint is bounded: a bbox is required, and the result set is
+    # capped, so a map view can never trigger an unbounded scan.
+    GIS_MAX_FEATURES: int = 2000
+
+    # ---- Hotspot detection (Phase 4) ----
+    # Deterministic PostGIS clustering (ST_ClusterDBSCAN), not spatial ML. All
+    # thresholds are configurable here rather than hardcoded in the query/service.
+    HOTSPOT_RADIUS_M: int = 2000
+    HOTSPOT_MIN_OBSERVATIONS: int = 3
+    HOTSPOT_WINDOW_DAYS: int = 30
+
+    # ---- Advisory (Phase 6) ----
+    ADVISORY_RULESET_PATH: str = "app/advisory/rulesets/advisory_v1.yaml"
+
+    # ---- Follow-up (Phase 7) ----
+    # Days until a follow-up is due, by risk level at the time it was scheduled. A
+    # higher-risk case gets checked sooner. Configurable, not hardcoded in the service.
+    FOLLOWUP_DAYS_HIGH: int = 3
+    FOLLOWUP_DAYS_MEDIUM: int = 7
+    FOLLOWUP_DAYS_LOW: int = 14
+    FOLLOWUP_DAYS_DEFAULT: int = 7  # no risk assessment available yet
+
+    # ---- Later phases ----
     SENSOR_INGEST_ENABLED: bool = False
+
+    @property
+    def allowed_image_mimes(self) -> set[str]:
+        return {m.strip().lower() for m in self.IMAGE_ALLOWED_MIME.split(",") if m.strip()}
 
     @property
     def cors_origins(self) -> list[str]:

@@ -27,6 +27,10 @@ from sqlalchemy.orm import Session, sessionmaker
 
 os.environ.setdefault("APP_ENV", "local")
 os.environ.setdefault("JWT_SECRET", "test-secret-value-not-used-outside-tests-0123456789")
+# Pin these explicitly so the test suite's behaviour never depends on whatever a
+# developer's local .env happens to contain.
+os.environ.setdefault("AI_ENABLED", "true")
+os.environ.setdefault("WEATHER_PROVIDER", "none")
 
 from app.api.deps import get_db  # noqa: E402
 from app.core.rbac import UserRole  # noqa: E402
