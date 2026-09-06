@@ -6,7 +6,7 @@
  * names the phase and deliberately shows no data.
  */
 
-import { createBrowserRouter } from 'react-router-dom'
+import { Navigate, createBrowserRouter } from 'react-router-dom'
 
 import { RedirectIfAuthenticated, RequireAuth, RequireRole, RoleHomeRedirect } from './guards'
 import { AppShell } from '@/components/layout/AppShell'
@@ -15,8 +15,15 @@ import { RegisterPage } from '@/features/auth/RegisterPage'
 import { PlannedPage } from '@/features/PlannedPage'
 import { FarmerHome } from '@/features/farmer/FarmerHome'
 import { FieldsPage } from '@/features/farmer/FieldsPage'
+import { CheckHealthPage } from '@/features/farmer/CheckHealthPage'
+import { MyObservationsPage } from '@/features/farmer/MyObservationsPage'
+import { ObservationResultPage } from '@/features/farmer/ObservationResultPage'
 import { ExpertHome } from '@/features/expert/ExpertHome'
+import { ReviewQueuePage } from '@/features/expert/ReviewQueuePage'
+import { ReviewDetailPage } from '@/features/expert/ReviewDetailPage'
+import { MapPage } from '@/features/map/MapPage'
 import { OfficialHome } from '@/features/official/OfficialHome'
+import { OfficialObservationDetailPage } from '@/features/official/OfficialObservationDetailPage'
 import { AdminHome } from '@/features/admin/AdminHome'
 
 export const router = createBrowserRouter([
@@ -50,12 +57,22 @@ export const router = createBrowserRouter([
       { index: true, element: <FarmerHome /> },
       { path: 'fields', element: <FieldsPage /> },
       // Observation capture depends on the AI pipeline (Phase 2).
-      { path: 'check', element: <PlannedPage titleKey="nav.checkHealth" phase="Phase 2" /> },
-      { path: 'reports', element: <PlannedPage titleKey="nav.reports" phase="Phase 2" /> },
-      { path: 'alerts', element: <PlannedPage titleKey="nav.alerts" phase="Phase 8" /> },
-      { path: 'advisory', element: <PlannedPage titleKey="nav.advisory" phase="Phase 6" /> },
-      { path: 'followups', element: <PlannedPage titleKey="nav.reports" phase="Phase 7" /> },
-      { path: 'expert-help', element: <PlannedPage titleKey="nav.expertHelp" phase="Phase 5" /> },
+      { path: 'check', element: <CheckHealthPage /> },
+      { path: 'observations/:id', element: <ObservationResultPage /> },
+      { path: 'observations', element: <MyObservationsPage /> },
+      // Farmer's own map (own observations only - hotspot detection stays
+      // EXTENSION_WORKER/OFFICIAL/ADMIN, per existing RBAC; MapPage hides that
+      // toggle for a role without VIEW_HOTSPOTS).
+      { path: 'map', element: <MapPage /> },
+      { path: 'reports', element: <PlannedPage titleKey="nav.reports" phase="a later phase" /> },
+      { path: 'alerts', element: <PlannedPage titleKey="nav.alerts" phase="a later phase" /> },
+      // Advisory and follow-up are fully built (Phase 6/7) but live embedded in each
+      // observation's own detail page rather than as a separate aggregate list - see
+      // `/app/observations/:id`. These redirect there instead of claiming "not
+      // implemented" for a feature that exists.
+      { path: 'advisory', element: <Navigate to="/app/observations" replace /> },
+      { path: 'followups', element: <Navigate to="/app/observations" replace /> },
+      { path: 'expert-help', element: <PlannedPage titleKey="nav.expertHelp" phase="a later phase" /> },
     ],
   },
 
@@ -69,10 +86,11 @@ export const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <ExpertHome /> },
-      { path: 'queue', element: <PlannedPage titleKey="nav.queue" phase="Phase 5" /> },
-      { path: 'cases/:id', element: <PlannedPage titleKey="nav.cases" phase="Phase 5" /> },
+      { path: 'queue', element: <ReviewQueuePage /> },
+      { path: 'cases/:id', element: <ReviewDetailPage /> },
+      // Lab referral is a future extension of the review workflow, not this phase.
       { path: 'referrals', element: <PlannedPage titleKey="nav.cases" phase="Phase 5" /> },
-      { path: 'map', element: <PlannedPage titleKey="nav.map" phase="Phase 4" /> },
+      { path: 'map', element: <MapPage /> },
     ],
   },
 
@@ -86,9 +104,11 @@ export const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: <OfficialHome /> },
-      { path: 'map', element: <PlannedPage titleKey="nav.map" phase="Phase 4" /> },
-      { path: 'hotspots', element: <PlannedPage titleKey="nav.hotspots" phase="Phase 4" /> },
-      { path: 'priority-zones', element: <PlannedPage titleKey="nav.hotspots" phase="Phase 4" /> },
+      { path: 'observations/:id', element: <OfficialObservationDetailPage /> },
+      { path: 'map', element: <MapPage /> },
+      { path: 'hotspots', element: <MapPage /> },
+      // Priority-zone ranking (beyond raw hotspots) is Phase 8 (official dashboards).
+      { path: 'priority-zones', element: <PlannedPage titleKey="nav.hotspots" phase="Phase 8" /> },
       { path: 'trends', element: <PlannedPage titleKey="nav.trends" phase="Phase 8" /> },
     ],
   },

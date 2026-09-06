@@ -19,6 +19,18 @@ import type { ApiWarning, ErrorEnvelope, SuccessEnvelope } from './types'
 export const API_BASE_URL: string =
   import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1'
 
+/** Absolute URL for a server-rooted path the API hands back (e.g. an image's
+ * `/api/v1/images/{id}`). `API_BASE_URL` already carries the `/api/v1` prefix, so
+ * concatenating the two directly would double it - strip the path part and keep the
+ * origin. */
+export function serverUrl(path: string): string {
+  try {
+    return new URL(path, API_BASE_URL).href
+  } catch {
+    return path
+  }
+}
+
 /** Typed error carrying the backend's machine-readable code and localisation key. */
 export class ApiError extends Error {
   // Declared as fields rather than constructor parameter properties: the project

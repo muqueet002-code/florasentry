@@ -12,6 +12,7 @@ import { TextField } from '@/components/ui/Field'
 import { ErrorState } from '@/components/ui/States'
 import { ROLE_HOME } from '@/app/roleHome'
 import { useAuthStore } from '@/stores/auth'
+import { AuthBackground } from '@/components/layout/AuthBackground'
 
 const schema = z.object({
   identifier: z.string().min(3),
@@ -59,7 +60,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-full max-w-md flex-col justify-center px-4 py-10">
+    <AuthBackground>
       <h1 className="text-2xl font-semibold text-slate-900">{t('app.name')}</h1>
       <p className="mt-1 text-sm text-slate-600">{t('app.tagline')}</p>
 
@@ -93,6 +94,6 @@ export function LoginPage() {
           {t('auth.signUp')}
         </Link>
       </p>
-    </div>
+    </AuthBackground>
   )
 }

@@ -13,6 +13,7 @@ import { ErrorState } from '@/components/ui/States'
 import { ROLE_HOME } from '@/app/roleHome'
 import { useAuthStore } from '@/stores/auth'
 import { useLanguageStore } from '@/stores/language'
+import { AuthBackground } from '@/components/layout/AuthBackground'
 
 const schema = z.object({
   full_name: z.string().min(2).max(150),
@@ -61,7 +62,7 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-full max-w-md flex-col justify-center px-4 py-10">
+    <AuthBackground>
       <h1 className="text-2xl font-semibold text-slate-900">{t('auth.signUp')}</h1>
       {/* Stated up front: self-registration cannot create a privileged role. */}
       <p className="mt-2 rounded-lg bg-slate-100 p-3 text-xs text-slate-600">
@@ -105,6 +106,6 @@ export function RegisterPage() {
           {t('auth.signIn')}
         </Link>
       </p>
-    </div>
+    </AuthBackground>
   )
 }

@@ -16,12 +16,27 @@
 
   --color-brand: oklch(0.5 0.13 155);
   --color-brand-dark: oklch(0.4 0.12 155);
+
+  /* Olive-green navigation surface (agri-tech identity, TRD 7.3). */
+  --color-olive: oklch(0.32 0.05 145);
+  --color-olive-light: oklch(0.4 0.06 145);
+  --color-olive-dark: oklch(0.26 0.045 145);
 }
 
+/* Nothing may push the page sideways: a farmer on a small phone must never have to
+   scroll horizontally to reach an action (PRD 16). Scoped to `body` only - putting it
+   on `html` as well turns the root into a fixed-height scroll container and silently
+   clips everything below the fold. */
+body {
+  overflow-x: hidden;
+}
+
+/* `min-height` rather than a fixed `height`: the shell must be able to grow past the
+   viewport so long pages scroll normally on the document. */
 html,
 body,
 #root {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
