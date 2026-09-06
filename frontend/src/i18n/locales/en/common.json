@@ -1,13 +1,16 @@
 {
   "app": {
     "name": "FloraSentry",
-    "tagline": "Crop health decision support",
-    "phaseBanner": "Phase 1 build - foundation only. AI detection, weather, risk, maps, expert review and advisories are not implemented yet."
+    "tagline": "Healthy Crops. Safer Tomorrow.",
+    "aiName": "KrishiMitra AI",
+    "aiTagline": "AI-powered crop health intelligence",
+    "phaseBanner": "Prototype build. Official dashboards, advanced analytics and outbreak forecasting are not implemented yet."
   },
   "nav": {
     "home": "Home",
     "fields": "My Fields",
-    "checkHealth": "Check Health",
+    "checkHealth": "New Observation",
+    "myObservations": "My Observations",
     "reports": "Reports",
     "alerts": "Alerts",
     "advisory": "Advisory",
@@ -22,7 +25,11 @@
     "dataSources": "Data Sources",
     "audit": "Audit Log",
     "logout": "Sign out",
-    "profile": "Profile"
+    "profile": "Profile",
+    "collapseMenu": "Collapse menu",
+    "expandMenu": "Expand menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "auth": {
     "signIn": "Sign in",
@@ -85,6 +92,37 @@
     "deleteConfirm": "Remove this field?",
     "coordinates": "Coordinates"
   },
+  "checkHealth": {
+    "field": "Field",
+    "noField": "No field selected - use current location instead",
+    "selectCrop": "Select crop...",
+    "growthStage": "Growth Stage",
+    "selectStage": "Select growth stage...",
+    "photo": "Photo",
+    "photoHint": "Take a clear photo of the affected leaf or plant.",
+    "uploadOrCapture": "or click to browse / take a photo",
+    "dropHere": "Drag and drop a photo of your crop",
+    "supportedFormats": "JPG, PNG or WEBP · max 10 MB",
+    "notAnImage": "That file is not an image. Please choose a JPG, PNG or WEBP photo.",
+    "orEnterManually": "Or enter coordinates manually",
+    "remove": "Remove",
+    "severity": "Severity (optional)",
+    "severityUnset": "Not specified",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "Anything else you noticed...",
+    "stage": {
+      "uploading": "Uploading image",
+      "quality": "Checking image quality",
+      "symptoms": "Analyzing crop symptoms",
+      "comparing": "Comparing disease patterns",
+      "confidence": "Assessing confidence",
+      "risk": "Calculating crop risk"
+    },
+    "orSearchPlace": "Or search by place / district name",
+    "placePlaceholder": "e.g. Nashik, Sinnar taluka",
+    "placeNotFound": "No place found with that name. Try a nearby town or district.",
+    "placeLookupFailed": "Place lookup is unavailable right now. Use GPS or enter coordinates."
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -112,7 +150,85 @@
     "admin": "Administration",
     "welcome": "Welcome, {{name}}",
     "fieldCount": "Fields registered",
-    "phase1Notice": "Phase 1 provides accounts, fields and reference data. Observation reporting and AI analysis arrive in Phase 2."
+    "phase1Notice": "Report a crop health issue any time - add a photo and your field's location, and we'll take it from there.",
+    "pendingReviews": "Awaiting your review",
+    "includeDemo": "Include demo data",
+    "empty": "Nothing to show yet.",
+    "reports": "reports",
+    "aiOnly": "AI-predicted only",
+    "unidentified": "Unidentified",
+    "avgSeverity": "avg. severity",
+    "disclaimer": "Monitoring view built from farmer reports, AI predictions and expert reviews. Not an official outbreak record.",
+    "caseDetail": "Case detail",
+    "confidence": "confidence",
+    "aiNotDiagnosis": "This is an AI assessment, not a confirmed diagnosis.",
+    "noPrediction": "No AI prediction is available for this report.",
+    "context": "Report context",
+    "reportedAt": "Reported at",
+    "reportedSeverity": "Farmer-reported severity",
+    "metric": {
+      "total": "Total observations",
+      "highRisk": "High-risk observations",
+      "pendingReview": "Pending expert review",
+      "confirmed": "Confirmed/corrected cases",
+      "hotspots": "Active hotspots",
+      "followupsAttention": "Follow-ups needing attention"
+    },
+    "section": {
+      "threats": "Most frequent threats",
+      "affectedCrops": "Affected crops",
+      "riskDistribution": "Risk distribution",
+      "diagnosisBasis": "Diagnosis basis",
+      "priorityAreas": "Priority areas",
+      "noPriorityAreas": "No cluster meets the hotspot threshold yet.",
+      "recentActivity": "Recent activity",
+      "newObservations": "New observations",
+      "expertValidations": "Expert validations",
+      "highRiskCases": "High-risk cases",
+      "worseningFollowups": "Worsening follow-ups"
+    },
+    "farmerMetric": {
+      "pending": "Pending Review",
+      "resolved": "Resolved"
+    },
+    "weatherUnavailable": "Weather unavailable",
+    "humidityShort": "Humidity",
+    "newObservation": "New Observation",
+    "newObservationHint": "Spotted something on your crop? Upload a photo and we'll analyze it.",
+    "startObservation": "Start Observation",
+    "latestObservation": "Latest Observation",
+    "cropUnknown": "Crop not recorded",
+    "riskLabel": "Risk",
+    "viewDetails": "View Details",
+    "recentObservations": "Recent Observations",
+    "table": {
+      "crop": "Crop",
+      "prediction": "Prediction",
+      "risk": "Risk",
+      "status": "Status",
+      "date": "Date"
+    },
+    "advisoryLoading": "Loading advice for your latest report...",
+    "advisoryEmpty": "Submit an observation to get crop health advice here."
+  },
+  "ai": {
+    "brand": "KrishiMitra AI",
+    "tagline": "AI-powered crop health intelligence",
+    "analysis": "KrishiMitra AI Analysis",
+    "prediction": "KrishiMitra AI Prediction",
+    "confidence": "KrishiMitra AI Confidence",
+    "advisory": "KrishiMitra AI Advisory",
+    "analyzeCta": "Analyze with KrishiMitra AI",
+    "notDiagnosis": "This is a KrishiMitra AI prediction, not a confirmed diagnosis.",
+    "likely": "Likely {{name}}",
+    "possible": "Possible {{name}}",
+    "uncertain": "Uncertain - Expert Review Recommended"
+  },
+  "map": {
+    "noObservations": "No observations to plot yet. Submit a crop report and it will appear here on the map."
+  },
+  "hotspot": {
+    "disclaimer": "Prototype clustering (density-based), not a validated outbreak-detection claim."
   },
   "errors": {
     "network": "Could not reach the server. Check your connection and try again.",
@@ -137,12 +253,102 @@
     "password_too_common": "That password is too common. Choose another.",
     "password_unchanged": "The new password must be different.",
     "no_farmer_profile": "This account has no farmer profile.",
-    "not_implemented": "This feature is not available yet."
+    "not_implemented": "This feature is not available yet.",
+    "advisory_unavailable": "Guidance could not be prepared right now.",
+    "followup_already_submitted": "This follow-up has already been submitted.",
+    "observation_not_reviewable": "This report is no longer awaiting review.",
+    "no_prediction_to_confirm": "There is no AI result to confirm for this report."
+  },
+  "advisory": {
+    "title": "Guidance for your crop",
+    "tierLabel": {
+      "confirmed": "Expert-confirmed guidance",
+      "ai_unconfirmed": "AI assessment - not yet confirmed",
+      "awaiting_review": "Waiting for expert review",
+      "rejected": "Report not supported",
+      "unavailable": "No assessment yet"
+    },
+    "disclaimer": "This is general decision-support guidance, not a validated scientific diagnosis or a prescription. Always confirm with an expert before taking major action.",
+    "riskContext": "Current risk level: {{risk_level}}",
+    "empty": "Guidance is not available for this report yet.",
+    "section": {
+      "rejected_notice": "This report was marked as not supported by an expert. The image or details may not have been clear enough to assess.",
+      "resubmit_guidance": "Consider submitting a new report with a clearer photo, taken in good light and close to the affected leaves or plant part.",
+      "no_diagnosis_yet": "No automatic assessment is available for this report yet.",
+      "general_hygiene": "Keep the field clean: remove fallen leaves and plant debris, and avoid working in the field when leaves are wet.",
+      "contact_expert_always": "Contact your local agriculture extension officer for a proper assessment of this report.",
+      "awaiting_review_notice": "An expert has not reviewed this report yet. Treat this as an early signal, not a confirmed result.",
+      "monitoring_basic": "Check the plant again every few days and note any change.",
+      "likely_healthy_notice": "The AI assessment suggests this plant may be healthy, but this is not confirmed.",
+      "ai_disease_notice": "The AI assessment suggests a possible disease or disorder. This is not confirmed - treat it as an early signal.",
+      "ai_pest_notice": "The AI assessment suggests a possible pest issue. This is not confirmed - treat it as an early signal.",
+      "ai_generic_notice": "The AI assessment could not clearly identify the issue. Treat this as an early signal only.",
+      "ipm_cultural": "Cultural practice: remove and dispose of visibly affected leaves or plants, rotate crops where possible, and avoid overcrowding plants.",
+      "ipm_mechanical": "Mechanical control: hand-remove pests or affected plant parts where practical, and use physical barriers or traps if available.",
+      "ipm_biological": "Biological control: encourage natural predators and beneficial insects in the field; avoid unnecessary disturbance to them.",
+      "monitoring_by_risk": "Monitor the field regularly. Current risk level: {{risk_level}}.",
+      "contact_expert_conditional": "If the condition spreads or does not improve, contact your local agriculture extension officer or laboratory for confirmation.",
+      "confirmed_healthy_notice": "An expert has confirmed this plant appears healthy.",
+      "confirmed_disease_notice": "An expert has confirmed a disease or disorder on this crop.",
+      "confirmed_pest_notice": "An expert has confirmed a pest issue on this crop.",
+      "safe_input_notice": "If you use any crop-protection product, always read and follow the product label, use recommended protective equipment, and observe the stated waiting period before harvest. Consult a licensed expert for product-specific advice - this app does not recommend specific products or doses.",
+      "contact_expert_always_confirmed": "Discuss recommended management steps with your local agriculture extension officer.",
+      "generic_notice": "General guidance is shown below. Contact your local agriculture extension officer for a full assessment."
+    }
+  },
+  "followup": {
+    "title": "Follow-up",
+    "due": "A follow-up check is due.",
+    "notDue": "Next follow-up check: {{date}}",
+    "none": "No follow-up has been scheduled for this report yet.",
+    "schedule": "Schedule a follow-up",
+    "submit": "Submit follow-up",
+    "submitting": "Submitting...",
+    "condition": "How is the crop looking now?",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "Anything you noticed since the last report...",
+    "photoOptional": "Photo (optional)",
+    "submitted": "Follow-up submitted.",
+    "outcome": {
+      "IMPROVED": "Improved",
+      "UNCHANGED": "No change",
+      "WORSENED": "Worsened",
+      "RESOLVED": "Resolved",
+      "NEEDS_EXPERT_REVIEW": "Needs expert review"
+    },
+    "status": {
+      "SCHEDULED": "Scheduled",
+      "SUBMITTED": "Submitted"
+    },
+    "expertView": {
+      "title": "Follow-ups",
+      "none": "No follow-ups recorded for this report.",
+      "attentionNeeded": "This follow-up may need attention."
+    }
   },
   "language": {
     "en": "English",
     "hi": "हिंदी",
     "mr": "मराठी",
     "select": "Choose language"
+  },
+  "profile": {
+    "title": "My Profile",
+    "name": "Full name",
+    "phone": "Phone number",
+    "email": "Email",
+    "location": "Location",
+    "language": "Preferred language",
+    "memberSince": "Member since",
+    "notSet": "Not set",
+    "noFieldYet": "No field added yet",
+    "role": {
+      "FARMER": "Farmer",
+      "EXTENSION_WORKER": "Extension Worker",
+      "LAB_EXPERT": "Laboratory Expert",
+      "OFFICIAL": "Agriculture Official",
+      "ADMIN": "Administrator"
+    },
+    "viewProfile": "View profile"
   }
 }
