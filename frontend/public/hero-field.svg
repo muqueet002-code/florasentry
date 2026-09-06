@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 500" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Crop field at golden hour">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#cfe3ec"/>
+      <stop offset="55%" stop-color="#eef0dd"/>
+      <stop offset="100%" stop-color="#f6e9c4"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="72%" cy="72%" r="38%">
+      <stop offset="0%" stop-color="#fff6d5" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#fff6d5" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cropBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7d9a53"/>
+      <stop offset="100%" stop-color="#4b6b34"/>
+    </linearGradient>
+    <linearGradient id="cropMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5f8340"/>
+      <stop offset="100%" stop-color="#33512a"/>
+    </linearGradient>
+    <linearGradient id="cropFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3f6130"/>
+      <stop offset="100%" stop-color="#21391f"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="500" fill="url(#sky)"/>
+  <rect width="1600" height="500" fill="url(#sun)"/>
+
+  <!-- distant treeline -->
+  <path d="M0 300 q60 -18 120 -4 t120 -8 t130 6 t140 -12 t150 10 t160 -6 t180 8 t200 -4 t200 10 v200 H0 Z"
+        fill="#8aa26a" opacity="0.55"/>
+
+  <!-- back crop band -->
+  <path d="M0 330 q120 -22 240 -6 t240 -10 t260 8 t300 -14 t560 12 v180 H0 Z" fill="url(#cropBack)"/>
+  <!-- mid crop band -->
+  <path d="M0 380 q140 -24 280 -6 t280 -12 t320 10 t720 -8 v146 H0 Z" fill="url(#cropMid)"/>
+  <!-- front crop band -->
+  <path d="M0 432 q160 -20 320 -4 t320 -10 t360 8 t600 -6 v80 H0 Z" fill="url(#cropFront)"/>
+
+  <!-- wheat stalks catching the light -->
+  <g stroke="#c8d99a" stroke-width="2.5" stroke-linecap="round" opacity="0.5" fill="none">
+    <path d="M90 500 q-8 -70 4 -120"/>
+    <path d="M260 500 q10 -80 -2 -130"/>
+    <path d="M470 500 q-9 -66 3 -112"/>
+    <path d="M700 500 q8 -76 -3 -124"/>
+    <path d="M930 500 q-10 -70 2 -118"/>
+    <path d="M1170 500 q9 -80 -2 -128"/>
+    <path d="M1400 500 q-8 -68 3 -114"/>
+    <path d="M1540 500 q10 -74 -2 -120"/>
+  </g>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Young corn seedlings in a field">
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dfeef0"/>
+      <stop offset="100%" stop-color="#eef3d8"/>
+    </linearGradient>
+    <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a2b1c"/>
+      <stop offset="100%" stop-color="#241a10"/>
+    </linearGradient>
+    <linearGradient id="leafDark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3f7d2c"/>
+      <stop offset="100%" stop-color="#245018"/>
+    </linearGradient>
+    <linearGradient id="leafLight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7bc94c"/>
+      <stop offset="100%" stop-color="#4f9a2e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="1600" fill="url(#sky2)"/>
+  <rect y="1150" width="1200" height="450" fill="url(#soil)"/>
+
+  <!-- rows of young corn seedlings, layered for depth -->
+  <g opacity="0.55">
+    <path d="M60 1180 C40 950 90 760 60 560" stroke="url(#leafDark)" stroke-width="26" fill="none" stroke-linecap="round"/>
+    <path d="M220 1190 C200 970 250 780 210 580" stroke="url(#leafDark)" stroke-width="30" fill="none" stroke-linecap="round"/>
+    <path d="M980 1185 C1000 955 950 765 990 565" stroke="url(#leafDark)" stroke-width="28" fill="none" stroke-linecap="round"/>
+    <path d="M1140 1195 C1160 975 1110 785 1150 585" stroke="url(#leafDark)" stroke-width="26" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <g opacity="0.85">
+    <path d="M150 1600 C130 1300 170 1050 140 800" stroke="url(#leafLight)" stroke-width="34" fill="none" stroke-linecap="round"/>
+    <path d="M340 1600 C320 1310 360 1060 330 810" stroke="url(#leafLight)" stroke-width="38" fill="none" stroke-linecap="round"/>
+    <path d="M860 1600 C880 1310 840 1060 870 810" stroke="url(#leafLight)" stroke-width="36" fill="none" stroke-linecap="round"/>
+    <path d="M1050 1600 C1070 1300 1030 1050 1060 800" stroke="url(#leafLight)" stroke-width="34" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- broad leaves catching the light -->
+  <g fill="#8fd15a" opacity="0.9">
+    <path d="M150 900 C260 860 340 900 400 970 C320 990 220 980 150 900 Z"/>
+    <path d="M340 750 C440 700 520 730 580 800 C500 830 400 820 340 750 Z"/>
+    <path d="M860 920 C760 875 690 905 640 975 C720 1000 810 990 860 920 Z"/>
+    <path d="M1000 760 C900 715 830 740 780 810 C860 840 950 825 1000 760 Z"/>
+  </g>
+  <g fill="#5ea336" opacity="0.9">
+    <path d="M120 1050 C230 1005 320 1040 380 1110 C290 1140 190 1130 120 1050 Z"/>
+    <path d="M1080 1060 C970 1015 880 1050 820 1120 C910 1150 1010 1140 1080 1060 Z"/>
+  </g>
+
+  <!-- foreground soil rows / mulch texture -->
+  <g fill="#1c140c" opacity="0.5">
+    <ellipse cx="200" cy="1420" rx="90" ry="18"/>
+    <ellipse cx="500" cy="1460" rx="110" ry="20"/>
+    <ellipse cx="820" cy="1430" rx="100" ry="18"/>
+    <ellipse cx="1050" cy="1470" rx="90" ry="16"/>
+  </g>
+</svg>
