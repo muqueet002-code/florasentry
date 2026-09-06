@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+
+/* Leaflet's stylesheet must load for map panes to position correctly. Imported here
+   rather than per-component so it is bundled once. */
+@import 'leaflet/dist/leaflet.css';
+
+@theme {
+  /* Provenance colours are semantic, not decorative: each one maps to exactly one
+     data-trust state (TRD 10.4). They are defined once here so no screen can style
+     a confirmed case like a predicted one by accident. */
+  --color-confirmed: oklch(0.55 0.15 150);
+  --color-predicted: oklch(0.72 0.16 75);
+  --color-pending: oklch(0.65 0.13 250);
+  --color-rejected: oklch(0.6 0.02 260);
+  --color-demo: oklch(0.6 0.2 320);
+
+  --color-brand: oklch(0.5 0.13 155);
+  --color-brand-dark: oklch(0.4 0.12 155);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+}
+
+/* Farmer UI is used outdoors on small phones: never render body text below 16px,
+   and keep tap targets finger-sized (PRD 16). */
+@media (max-width: 640px) {
+  body {
+    font-size: 16px;
+  }
+}

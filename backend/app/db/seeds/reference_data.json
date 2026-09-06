@@ -1,0 +1,106 @@
+{
+  "_README": [
+    "PROVISIONAL REFERENCE CATALOGUE - NOT A VERIFIED CROP/AGENT LIST.",
+    "",
+    "TRD decisions D2 (supported crop list) and D3 (AI class list) are UNRESOLVED.",
+    "The entries below are a small, plausible starter vocabulary for Maharashtra so",
+    "that the crop-context UI and the field/observation forms have something real to",
+    "bind to during Phase 1. They are NOT an agronomic recommendation, NOT a claim",
+    "about which crops or diseases the system supports, and NOT training data.",
+    "",
+    "Every agent below is seeded with is_ai_supported = false, because Phase 1 ships",
+    "no model. Phase 2 sets that flag from the registered model's declared class list -",
+    "it must never be set by hand.",
+    "",
+    "Replace this file once D2/D3 are decided, and register the authoritative source",
+    "in the data_sources table."
+  ],
+  "data_source": {
+    "code": "PROVISIONAL_REFERENCE_CATALOG",
+    "name": "Provisional crop and agent catalogue (placeholder pending TRD decisions D2/D3)",
+    "source_type": "PUBLIC_DATA",
+    "category": "REFERENCE_CATALOG",
+    "provider_name": null,
+    "url": null,
+    "licence": null,
+    "version_or_release": "phase1-provisional",
+    "is_verified": false,
+    "notes": "Placeholder vocabulary. Not verified against any authoritative source. Must be replaced before any pilot use."
+  },
+  "crops": [
+    {
+      "code": "COTTON",
+      "name_en": "Cotton",
+      "name_hi": "कपास",
+      "name_mr": "कापूस",
+      "scientific_name": "Gossypium hirsutum",
+      "growth_stages": [
+        {"code": "SOWING", "sequence": 1, "name_en": "Sowing", "name_hi": "बुआई", "name_mr": "पेरणी"},
+        {"code": "VEGETATIVE", "sequence": 2, "name_en": "Vegetative", "name_hi": "वानस्पतिक", "name_mr": "वाढ"},
+        {"code": "SQUARE_FORMATION", "sequence": 3, "name_en": "Square formation", "name_hi": "कली बनना", "name_mr": "पाती लागणे"},
+        {"code": "FLOWERING", "sequence": 4, "name_en": "Flowering", "name_hi": "फूल आना", "name_mr": "फुलोरा"},
+        {"code": "BOLL_DEVELOPMENT", "sequence": 5, "name_en": "Boll development", "name_hi": "टिंडा विकास", "name_mr": "बोंड वाढ"},
+        {"code": "MATURITY", "sequence": 6, "name_en": "Maturity", "name_hi": "पकना", "name_mr": "पक्वता"}
+      ],
+      "varieties": []
+    },
+    {
+      "code": "SOYBEAN",
+      "name_en": "Soybean",
+      "name_hi": "सोयाबीन",
+      "name_mr": "सोयाबीन",
+      "scientific_name": "Glycine max",
+      "growth_stages": [
+        {"code": "SOWING", "sequence": 1, "name_en": "Sowing", "name_hi": "बुआई", "name_mr": "पेरणी"},
+        {"code": "VEGETATIVE", "sequence": 2, "name_en": "Vegetative", "name_hi": "वानस्पतिक", "name_mr": "वाढ"},
+        {"code": "FLOWERING", "sequence": 3, "name_en": "Flowering", "name_hi": "फूल आना", "name_mr": "फुलोरा"},
+        {"code": "POD_FILLING", "sequence": 4, "name_en": "Pod filling", "name_hi": "फली भरना", "name_mr": "शेंग भरणे"},
+        {"code": "MATURITY", "sequence": 5, "name_en": "Maturity", "name_hi": "पकना", "name_mr": "पक्वता"}
+      ],
+      "varieties": []
+    },
+    {
+      "code": "TOMATO",
+      "name_en": "Tomato",
+      "name_hi": "टमाटर",
+      "name_mr": "टोमॅटो",
+      "scientific_name": "Solanum lycopersicum",
+      "growth_stages": [
+        {"code": "NURSERY", "sequence": 1, "name_en": "Nursery", "name_hi": "नर्सरी", "name_mr": "रोपवाटिका"},
+        {"code": "TRANSPLANT", "sequence": 2, "name_en": "Transplanting", "name_hi": "रोपाई", "name_mr": "लागवड"},
+        {"code": "VEGETATIVE", "sequence": 3, "name_en": "Vegetative", "name_hi": "वानस्पतिक", "name_mr": "वाढ"},
+        {"code": "FLOWERING", "sequence": 4, "name_en": "Flowering", "name_hi": "फूल आना", "name_mr": "फुलोरा"},
+        {"code": "FRUITING", "sequence": 5, "name_en": "Fruiting", "name_hi": "फल आना", "name_mr": "फळधारणा"},
+        {"code": "HARVEST", "sequence": 6, "name_en": "Harvest", "name_hi": "कटाई", "name_mr": "काढणी"}
+      ],
+      "varieties": []
+    }
+  ],
+  "agents": [
+    {
+      "code": "HEALTHY",
+      "kind": "HEALTHY",
+      "name_en": "No disease or pest detected",
+      "name_hi": "कोई रोग या कीट नहीं",
+      "name_mr": "रोग किंवा कीड आढळली नाही",
+      "scientific_name": null,
+      "crops": ["COTTON", "SOYBEAN", "TOMATO"]
+    },
+    {
+      "code": "UNKNOWN",
+      "kind": "UNKNOWN",
+      "name_en": "Unidentified - expert review required",
+      "name_hi": "अज्ञात - विशेषज्ञ समीक्षा आवश्यक",
+      "name_mr": "अज्ञात - तज्ञ पडताळणी आवश्यक",
+      "scientific_name": null,
+      "crops": []
+    }
+  ],
+  "symptoms": [
+    {"code": "LEAF_SPOT", "name_en": "Leaf spots", "name_hi": "पत्ती पर धब्बे", "name_mr": "पानावर डाग", "body_part": "LEAF"},
+    {"code": "LEAF_YELLOWING", "name_en": "Yellowing of leaves", "name_hi": "पत्तियों का पीला पडना", "name_mr": "पाने पिवळी पडणे", "body_part": "LEAF"},
+    {"code": "WILTING", "name_en": "Wilting", "name_hi": "मुरझाना", "name_mr": "सुकणे", "body_part": "WHOLE_PLANT"},
+    {"code": "LEAF_CURL", "name_en": "Leaf curling", "name_hi": "पत्ती मुड़ना", "name_mr": "पाने वाकडणे", "body_part": "LEAF"},
+    {"code": "HOLES_IN_LEAF", "name_en": "Holes in leaves", "name_hi": "पत्तियों में छेद", "name_mr": "पानांना छिद्रे", "body_part": "LEAF"}
+  ]
+}

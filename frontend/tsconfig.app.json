@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
+    "allowArbitraryExtensions": true,
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Path alias. Must mirror `resolve.alias` in vite.config.ts - if the two ever
+       disagree, the build and the type-checker disagree, which is worse than
+       having no alias at all. `baseUrl` is omitted: it is deprecated in TS 7, and
+       modern `paths` entries resolve relative to this file. */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    /* The i18n bundles are imported directly as typed objects. */
+    "resolveJsonModule": true,
+
+    /* Type safety */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}

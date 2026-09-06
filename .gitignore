@@ -1,0 +1,46 @@
+# --- secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+dist/
+build/
+
+# --- node ---
+node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/.vite/
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# --- media and models (large binaries, not source) ---
+media/
+uploads/
+models/*.pt
+models/*.pth
+models/*.onnx
+datasets/
+
+# --- editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
