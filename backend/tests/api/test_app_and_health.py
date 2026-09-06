@@ -41,13 +41,12 @@ class TestHealthEndpoint:
         assert set(data["components"]) == {"database", "postgis", "ai_model", "weather_provider"}
 
     def test_health_reports_unconfigured_modules_honestly(self, client: TestClient) -> None:
-        """No model is registered in this environment - say so, never imply working."""
+        """Phase 1 has no model and no weather provider - say so, do not imply working."""
         components = client.get("/health").json()["data"]["components"]
         assert components["ai_model"]["ok"] is False
-        assert components["ai_model"]["state"] in {"AI_MODEL_UNAVAILABLE", "UNKNOWN"}
-        # A weather provider is now selected (Phase 3); "ok" reflects selection, not a
-        # live reachability check, which happens per request instead.
-        assert components["weather_provider"]["state"] in {"CONFIGURED", "DISABLED"}
+        assert components["ai_model"]["state"] == "NOT_CONFIGURED"
+        assert components["weather_provider"]["ok"] is False
+        assert components["weather_provider"]["state"] == "NOT_CONFIGURED"
 
     def test_readiness_reports_database_state(self, client: TestClient) -> None:
         response = client.get("/health/ready")
@@ -95,13 +94,13 @@ class TestPhaseBoundaries:
     """Unimplemented modules must say so, never return fabricated results."""
 
     def test_planned_endpoints_return_501(self, client: TestClient) -> None:
-        # gis/*, reviews/*, advisory, followups and the official dashboard were
-        # implemented in Phase 4-8 and moved out of this list; their own tests live in
-        # test_gis.py, test_reviews.py, test_advisory.py, test_followups.py and
-        # test_dashboards.py. Farmer/expert dashboards remain out of scope.
         for path in [
-            "/api/v1/dashboards/farmer",
-            "/api/v1/dashboards/expert",
+            "/api/v1/weather/current",
+            "/api/v1/gis/observations",
+            "/api/v1/hotspots",
+            "/api/v1/reviews/queue",
+            "/api/v1/dashboards/official",
+            "/api/v1/followups",
         ]:
             response = client.get(path)
             assert response.status_code == 501, f"{path} should be 501"
@@ -111,14 +110,11 @@ class TestPhaseBoundaries:
 
     def test_planned_endpoints_return_no_data_payload(self, client: TestClient) -> None:
         """The failure mode this guards: a stub that returns plausible fake data."""
-        body = client.get("/api/v1/dashboards/farmer").json()
+        body = client.get("/api/v1/dashboards/official").json()
         assert body["success"] is False
         assert "data" not in body
 
     def test_ai_analyze_does_not_fabricate_a_prediction(self, client: TestClient) -> None:
-        """No auth header -> 401 first. The no-model case is covered with a real
-        session in tests/integration/test_observation_pipeline.py, which is where an
-        actual AI_MODEL_UNAVAILABLE response (not a fabricated prediction) is proven."""
         response = client.post("/api/v1/ai/analyze")
-        assert response.status_code == 401
+        assert response.status_code == 501
         assert "confidence" not in response.text

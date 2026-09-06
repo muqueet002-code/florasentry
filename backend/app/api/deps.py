@@ -12,7 +12,7 @@ import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from fastapi import Depends, Header, Query, Request
+from fastapi import Depends, Header, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
@@ -121,20 +121,11 @@ def require_permission(permission: Permission) -> Callable[[CurrentUser], Curren
     return _guard
 
 
-def get_language(
-    lang: str | None = Query(default=None),
-    accept_language: str | None = Header(default=None),
-) -> str:
-    """Language negotiation (TRD 22.2): ?lang= > Accept-Language > default.
+def get_language(accept_language: str | None = Header(default=None)) -> str:
+    """Language negotiation (TRD 22.2): ?lang= > Accept-Language > user pref > default.
 
-    `lang` is declared here, once, so every route depending on `get_language`
-    automatically accepts the query override - a route does not need to redeclare it.
+    The query-parameter tier is applied by routes that accept `lang` explicitly.
     """
-    if lang:
-        base = lang.strip().lower().split("-")[0]
-        if base in settings.supported_languages:
-            return base
-
     if accept_language:
         for part in accept_language.split(","):
             code = part.split(";")[0].strip().lower()

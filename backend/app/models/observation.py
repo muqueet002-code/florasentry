@@ -119,9 +119,6 @@ class Observation(Base, TimestampMixin, SoftDeleteMixin, ProvenanceMixin):
         PGUUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
     verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    # Optional short note an expert leaves with a CONFIRM/CORRECT/REJECT decision
-    # (Phase 5). Distinct from the farmer's own `notes` above.
-    review_note: Mapped[str | None] = mapped_column(String(1000), nullable=True)
 
     data_source_id: Mapped[uuid.UUID | None] = mapped_column(
         PGUUID(as_uuid=True), ForeignKey("data_sources.id", ondelete="SET NULL"), nullable=True

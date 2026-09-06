@@ -21,17 +21,32 @@ from app.core.errors import NotImplementedForPhaseError
 
 router = APIRouter()
 
-# Phases 2-7 are implemented; their entries were removed from this list and their real
-# routers mounted in `router.py`. That is the intended lifecycle: a phase deletes its
-# stub rather than adding a parallel path.
-#
 # (path, method, tag, feature name, delivering phase)
 PLANNED_ENDPOINTS: list[tuple[str, str, str, str, str]] = [
-    # Farmer/expert home screens already surface their own relevant data (fields,
-    # review queue, advisory, follow-up); only the official monitoring view was in
-    # scope for Phase 8, and it is now a real router (see `dashboards.py`).
+    # Phase 2 - AI detection
+    ("/observations", "POST", "observations", "Create observation", "Phase 2"),
+    ("/observations", "GET", "observations", "List observations", "Phase 2"),
+    ("/ai/analyze", "POST", "ai", "Stateless image analysis", "Phase 2"),
+    ("/ai/models/active", "GET", "ai", "Active model metadata", "Phase 2"),
+    # Phase 3 - weather and risk
+    ("/weather/current", "GET", "weather", "Current weather", "Phase 3"),
+    ("/weather/forecast", "GET", "weather", "Weather forecast", "Phase 3"),
+    ("/risk/ruleset", "GET", "risk", "Active risk ruleset", "Phase 3"),
+    # Phase 4 - GIS and hotspots
+    ("/gis/observations", "GET", "gis", "Observation points layer", "Phase 4"),
+    ("/gis/layers/{layer}", "GET", "gis", "Named map layer", "Phase 4"),
+    ("/hotspots", "GET", "gis", "Hotspot list", "Phase 4"),
+    # Phase 5 - expert validation
+    ("/reviews/queue", "GET", "expert-review", "Expert review queue", "Phase 5"),
+    ("/reviews/{review_id}/decision", "POST", "expert-review", "Expert decision", "Phase 5"),
+    # Phase 6 - advisory
+    ("/observations/{observation_id}/advisory", "GET", "advisory", "Advisory", "Phase 6"),
+    # Phase 7 - follow-up
+    ("/followups", "GET", "followups", "Follow-up list", "Phase 7"),
+    # Phase 8 - dashboards
     ("/dashboards/farmer", "GET", "dashboards", "Farmer dashboard", "Phase 8"),
     ("/dashboards/expert", "GET", "dashboards", "Expert dashboard", "Phase 8"),
+    ("/dashboards/official", "GET", "dashboards", "Official dashboard", "Phase 8"),
 ]
 
 

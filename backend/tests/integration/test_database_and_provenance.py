@@ -29,7 +29,7 @@ class TestDatabaseFoundation:
 
     def test_migration_has_been_applied(self, db_session: Session) -> None:
         revision = db_session.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-        assert revision == "0004_followups"
+        assert revision == "0001_initial"
 
     def test_all_phase1_tables_exist(self, db_session: Session) -> None:
         expected = {
