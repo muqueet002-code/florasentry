@@ -159,6 +159,22 @@ class Settings(BaseSettings):
     def is_local(self) -> bool:
         return self.APP_ENV == "local"
 
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def _normalize_database_url(cls, v: str) -> str:
+        """Accept the plain URL Render (and most Postgres hosts) provide.
+
+        Render's connection string uses the `postgresql://` / `postgres://` scheme,
+        not SQLAlchemy's psycopg-specific `postgresql+psycopg://`. Rewriting the
+        scheme here means the same DATABASE_URL Render shows in its dashboard can be
+        pasted in directly, with no manual edit required.
+        """
+        if v.startswith("postgres://"):
+            return "postgresql+psycopg://" + v[len("postgres://") :]
+        if v.startswith("postgresql://"):
+            return "postgresql+psycopg://" + v[len("postgresql://") :]
+        return v
+
     @field_validator("GIS_OPERATING_BBOX")
     @classmethod
     def _validate_bbox(cls, v: str) -> str:

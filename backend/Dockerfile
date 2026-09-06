@@ -33,6 +33,8 @@ COPY alembic.ini ./
 COPY alembic ./alembic
 COPY app ./app
 COPY scripts ./scripts
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
 
 # Run as a non-root user.
 RUN useradd --create-home --uid 10001 florasentry \
@@ -45,4 +47,6 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
     CMD curl -fsS http://localhost:8000/health || exit 1
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# The entrypoint runs `alembic upgrade head` before starting the API, so the
+# database schema is always applied on deploy - see docker-entrypoint.sh.
+ENTRYPOINT ["./docker-entrypoint.sh"]
