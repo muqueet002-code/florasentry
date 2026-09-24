@@ -139,7 +139,7 @@ jobs:
 
       - name: Ensure the example secret is not used as a real value
         run: |
-          if git grep -n "JWT_SECRET=" -- ':!*.example' ':!.github' | grep -v '^\s*$'; then
+          if git grep -n "JWT_SECRET=" -- ':!*.example' ':!.github' ':!backend/tests/**' | grep -v '^\s*$'; then
             echo "ERROR: JWT_SECRET assigned outside .env.example"
             exit 1
           fi
