@@ -452,3 +452,8 @@ demo-data seed script. What's left is not code: the TRD decisions D2/D3 (an
 authoritative crop/disease vocabulary), D16 (a map tile provider whose terms have been
 verified), and D10 (human-reviewed Hindi/Marathi translation) are still open, and
 training/evaluating a real AI model was never in scope for this prototype.
+
+
+## Contributors
+
+- Shafia Zaidi
