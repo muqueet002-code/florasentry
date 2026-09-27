@@ -457,3 +457,7 @@ training/evaluating a real AI model was never in scope for this prototype.
 ## Contributors
 
 - Shafia Zaidi
+
+## Contributors
+
+- Kaif-Coex6 — Project development and collaboration.
