@@ -1,0 +1,3 @@
+My name is Jaismin Kaur Sethi.
+I am a contributor to the FloraSentry project.
+This is my first Git contribution.
